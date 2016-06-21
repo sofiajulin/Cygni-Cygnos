@@ -1,2 +1,2 @@
-# Cygni-Cygnos
-Startplatta för höstkonferens 2016
+﻿# Cygni-Cygnos
+Startplatta på olika plattformar för höstkonferens 2016
