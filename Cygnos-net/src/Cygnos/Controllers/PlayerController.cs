@@ -1,18 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Cygnos.Model;
+﻿using Cygnos.Model;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
 
 namespace Cygnos.Controllers
-{
-    public class foo
-    {
-        public string a { get; set; }
-    }
-
+{    
     [Route("api/[controller]")]
     public class PlayerController : Controller
     {

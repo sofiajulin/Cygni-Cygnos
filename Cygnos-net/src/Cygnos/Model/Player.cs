@@ -9,12 +9,6 @@ namespace Cygnos.Model
         private WaveOut output;
         private Mp3FileReader reader;
 
-        public Player()
-        {
-
-            
-        }       
-
         public void Play(string url)
         {
             if (output != null)
