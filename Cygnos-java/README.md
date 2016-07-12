@@ -2,6 +2,16 @@
 
 This is a simple backend that exposed a couple of REST endpoints for searching tracks and playing, pausing and stopping a track. It is also possible to query the current state and volume as well as setting the volume.
 
+#Prerequisites
+
+1. Java 8 with Java FX (OpenJDK won't work)
+2. curl for running the examples below
+
+#Running
+```
+./mvnw spring-boot:run
+```
+
 ##Examples
 
 ###Search for track [GET]
