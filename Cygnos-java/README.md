@@ -18,27 +18,27 @@ curl -H "Content-Type: application/json" -X POST -d '{ "id": "3iGbTfFPGC81wkArfw
 > Note: post pause again to unpause current state
 
 ```
-curl -X POST localhost:8080/api/pause
+curl -X POST http://localhost:8080/api/pause
 ```
 
 ###Stop [POST]
 ```
-curl -X POST localhost:8080/api/stop
+curl -X POST http://localhost:8080/api/stop
 ```
 
 ###Current volume [GET]
 ```
-curl localhost:8080/api/volume
+curl http://localhost:8080/api/volume
 ```
 
 ###Set volume [POST, query params] 
 > Note: volume must be between 0 and 1.0
 
 ```
-curl -X POST localhost:8080/api/volume?volume=0.6
+curl -X POST http://localhost:8080/api/volume?volume=0.6
 ```
 
 ###Current state [GET]
 ```
-curl localhost:8080/api/state
+curl http://localhost:8080/api/state
 ```
