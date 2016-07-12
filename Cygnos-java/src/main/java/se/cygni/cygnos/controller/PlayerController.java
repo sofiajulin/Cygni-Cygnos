@@ -10,7 +10,7 @@ import se.cygni.cygnos.service.Mp3PlayerService;
 import java.net.URL;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/player")
 public class PlayerController {
 
     private final Mp3PlayerService player;
