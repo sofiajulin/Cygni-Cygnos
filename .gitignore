@@ -250,3 +250,26 @@ paket-files/
 # JetBrains Rider
 .idea/
 *.sln.iml
+
+# Generated stuff
+*.class
+*.data
+*.ser
+*.log
+
+# Eclipse
+.settings
+.project
+.classpath
+
+# Maven
+target
+
+# IntelliJ
+*.iml
+*.ipr
+*.iws
+out
+
+# OSX
+.DS_Store
