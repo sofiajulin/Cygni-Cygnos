@@ -11,9 +11,8 @@ namespace Cygnos.Model
 
         public void Play(string url)
         {
-            if (output != null)
-                output.Stop();
-            
+            output?.Stop();
+
             var ms = new MemoryStream();
             using (var stream = WebRequest.Create(url).GetResponse().GetResponseStream())
             {
@@ -34,7 +33,7 @@ namespace Cygnos.Model
       
         public void Stop()
         {
-            output.Stop();
+            output?.Stop();
             output = null;
         }
 
@@ -56,8 +55,12 @@ namespace Cygnos.Model
 
         public float Volume
         {
-            get { return output.Volume; }
-            set { output.Volume = value; }
+            get { return output?.Volume ?? 0; }
+            set
+            {
+                if (output != null)
+                    output.Volume = value;
+            }
         }
     }
 }

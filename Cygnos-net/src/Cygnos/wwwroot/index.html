@@ -15,7 +15,7 @@
                                 $.each(tracks,
                                     function (index, track) {
                                         items.push("<li data-trackData='" +
-                                           JSON.stringify(track) +
+                                            JSON.stringify(track) +
                                             "'>" +
                                             track.trackName +
                                             "</li>");
@@ -24,14 +24,14 @@
                                 $("#results").html(items.join(""));
                             });
                     });
-                $("#stop").click(function () {
-                    $.ajax({
-                        type: "POST",
-                        url: "api/player/stop",
-                        contentType: "application/json",
-                        data: $(this).attr("data-trackData")
-                    });
-                })
+                $("#stop")
+                    .click(function () {
+                        $.ajax({
+                            type: "POST",
+                            url: "api/player/stop",
+                            contentType: "application/json",
+                        });
+                    })
                 $("#results")
                     .on("click",
                         "li",
@@ -45,6 +45,30 @@
                         });
             });
     </script>
+    <script src="http://js.leapmotion.com/leap-0.6.3.min.js"></script>
+    <script>
+        var controllerOptions = { enableGestures: true };
+        Leap.loop(controllerOptions,
+            function (frame) {
+                if (frame.hands.length > 0) {
+
+                    //thumb down to stop
+                    for (var i = 0; i < frame.hands.length; i++) {
+                        var hand = frame.hands[i];
+                        if (hand.type === "left") {
+                            if (Math.abs(hand.palmNormal[0]) > 0.7) {
+                                $.ajax({
+                                    type: "POST",
+                                    url: "api/player/stop",
+                                    contentType: "application/json",
+                                });
+                            }
+                        }
+                    }
+                }
+            });
+    </script>
+
 
 
 </head>
@@ -57,6 +81,7 @@
         <button id="search" onclick="">Search</button>
         <button id="stop" onclick="">Stop</button>
         <div id="results"></div>
+        <h1 id="pinch">asdasd</h1>
     </div>
 </body>
 
