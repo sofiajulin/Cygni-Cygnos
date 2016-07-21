@@ -48,23 +48,43 @@
     <script src="http://js.leapmotion.com/leap-0.6.3.min.js"></script>
     <script>
         var controllerOptions = { enableGestures: true };
+        var lastCall = 0;
         Leap.loop(controllerOptions,
             function (frame) {
-                if (frame.hands.length > 0) {
+                //Only accept one call every three seconds, to avoid flooding our poor little server
+                if (new Date() - lastCall < 3000)
+                    return;
+               
 
-                    //thumb down to stop
+                if (frame.hands.length > 0) {
+                    //thumb down (vertical hand) to stop
                     for (var i = 0; i < frame.hands.length; i++) {
                         var hand = frame.hands[i];
-                        if (hand.type === "left") {
-                            if (Math.abs(hand.palmNormal[0]) > 0.7) {
-                                $.ajax({
-                                    type: "POST",
-                                    url: "api/player/stop",
-                                    contentType: "application/json",
-                                });
-                            }
+                        if (Math.abs(hand.palmNormal[0]) > 0.7) {
+                            $.ajax({
+                                type: "POST",
+                                url: "api/player/stop",
+                                contentType: "application/json",
+                            });
+                            lastCall = new Date();
                         }
                     }
+
+                    //Devil horns plays rock!
+                    for (var i = 0; i < frame.hands.length; i++) {
+                        var hand = frame.hands[i];
+                        if (hand.pinky.extended && !hand.ringFinger.extended && !hand.middleFinger.extended && hand.indexFinger.extended) {
+                            $.ajax({
+                                type: "POST",
+                                url: "api/player/stop",
+                                url: "api/player/play",
+                                contentType: "application/json",
+                                data: JSON.stringify({ "previewUrl": "https://p.scdn.co/mp3-preview/1ee9f1b0c3e3b327dd49ebc6dd64266b01adb96a" })
+                            });
+                            lastCall = new Date();
+                        }
+                    }
+
                 }
             });
     </script>
