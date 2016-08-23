@@ -4,18 +4,17 @@ This is a simple backend that exposed a couple of REST endpoints for searching t
 
 ##Prerequisites
 
-1. Java 8 with Java FX (OpenJDK won't work)
-2. curl for running the examples below
+1. VisualStudio?
 
 ##Running
 ```
-./mvnw spring-boot:run
+???
 ```
 
 ##Web page
 There is a simple web page that illustrates the search and playing of tracks here:
 
-http://localhost:8080/index.html
+http://localhost:8080/index.html < check port
 
 ##Examples
 

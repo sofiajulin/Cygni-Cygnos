@@ -66,6 +66,7 @@
                                 url: "api/player/stop",
                                 contentType: "application/json",
                             });
+                            $("#gesture").html("<i>thumb down</i>")
                             lastCall = new Date();
                         }
                     }
@@ -81,6 +82,7 @@
                                 contentType: "application/json",
                                 data: JSON.stringify({ "previewUrl": "https://p.scdn.co/mp3-preview/1ee9f1b0c3e3b327dd49ebc6dd64266b01adb96a" })
                             });
+                            $("#gesture").html("<i>Devil horns</i>")
                             lastCall = new Date();
                         }
                     }
@@ -96,12 +98,12 @@
 <body>
     <div class="container">
         <h1>Search for tracks</h1>
-        <p>Type an search query and click on "Search". Then, click on any track to play it on server....</p>
+        <p>Type a search query and click on "Search". Then, click on any track to play it on server....</p>
         <input type="text" id="query" value="" class="form-control" placeholder="Search for..." />
         <button id="search" onclick="">Search</button>
         <button id="stop" onclick="">Stop</button>
         <div id="results"></div>
-        <h1 id="pinch">asdasd</h1>
+        <p id="gesture"></p>
     </div>
 </body>
 
