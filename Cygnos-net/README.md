@@ -4,57 +4,36 @@ This is a simple backend that exposed a couple of REST endpoints for searching t
 
 ##Prerequisites
 
-1. VisualStudio?
+1. VisualStudio 2015 with latest updates!
 
 ##Running
-```
-???
-```
+Open solution, hit F5
 
 ##Web page
 There is a simple web page that illustrates the search and playing of tracks here:
 
-http://localhost:8080/index.html < check port
+http://localhost:58068/index.html 
 
 ##Examples
 
 ###Search for track [GET]
 ```
-curl http://localhost:8080/api/search/helt%20sjukt
+curl http://localhost:58068/api/search/helt%20sjukt
 ```
 
 ###Play a track [POST, body]
 ```
-curl -H "Content-Type: application/json" -X POST -d '{ "id": "3iGbTfFPGC81wkArfwIqIn", "previewUrl": "https://p.scdn.co/mp3-preview/9e4c6d6418bf191c87a79b6b82a7b262d2d126bf", "artistName": "Nostra Love", "trackName": "Helt Sjukt", "albumName": "Helt Sjukt" }' http://localhost:8080/api/player/play
-```
-
-###Pause [POST] 
-> Note: post pause again to unpause current state
-
-```
-curl -X POST http://localhost:8080/api/player/pause
+curl -H "Content-Type: application/json" -X POST -d '{ "id": "3iGbTfFPGC81wkArfwIqIn", "previewUrl": "https://p.scdn.co/mp3-preview/9e4c6d6418bf191c87a79b6b82a7b262d2d126bf", "artistName": "Nostra Love", "trackName": "Helt Sjukt", "albumName": "Helt Sjukt" }' http://localhost:58068/api/player/play
 ```
 
 ###Stop [POST]
 ```
-curl -X POST http://localhost:8080/api/player/stop
+curl -X POST http://localhost:58068/api/player/stop -d null
 ```
 
 ###Current volume [GET]
 ```
-curl http://localhost:8080/api/player/volume
-```
-
-###Set volume [POST, query params] 
-> Note: volume must be between 0 and 1.0
-
-```
-curl -X POST http://localhost:8080/api/player/volume?volume=0.6
-```
-
-###Current state [GET]
-```
-curl http://localhost:8080/api/player/state
+curl http://localhost:58068/api/player/volume
 ```
 
 ##References
