@@ -12,11 +12,15 @@ PIXI.loader
     .add('pixie', 'images/Pixie.json')
     .load(onAssetsLoaded);
 
-var postition = 0,
+var position = 0,
     background,
     background2,
     foreground,
-    foreground2;
+    foreground2,
+    block,
+    pixie,
+    endScreen,
+    jumping = false;
 
 stage.interactive = true;
 
@@ -30,9 +34,20 @@ function onAssetsLoaded(loader, res) {
     foreground2 = PIXI.Sprite.fromImage('images/iP4_ground.png');
     stage.addChild(foreground);
     stage.addChild(foreground2);
+
     foreground.position.y = foreground2.position.y = 600 - 130;
 
-    var pixie = new PIXI.spine.Spine(res.pixie.spineData);
+    block = new PIXI.Graphics();
+    block.beginFill(0xFFFF00);
+    block.drawRect(0, 0, 20, 50);
+    block.position = {
+        x: -100,
+        y: foreground.position.y
+    };
+
+    stage.addChild(block);
+
+    pixie = new PIXI.spine.Spine(res.pixie.spineData);
     global = pixie;
     var scale = 0.3;
 
@@ -43,6 +58,10 @@ function onAssetsLoaded(loader, res) {
 
     stage.addChild(pixie);
 
+    endScreen = new PIXI.Text('You DIED',{fontFamily : 'Arial', fontSize: 24, fill : 0xff1010, align : 'center'});
+    endScreen.visible = false;
+    stage.addChild(endScreen);
+
     pixie.stateData.setMixByName('running', 'jump', 0.2);
     pixie.stateData.setMixByName('jump', 'running', 0.4);
 
@@ -50,48 +69,85 @@ function onAssetsLoaded(loader, res) {
 
     stage.on('mousedown', onTouchStart);
     stage.on('touchstart', onTouchStart);
-    stage.on('jump', onTouchStart);
 
     function onTouchStart() {
         pixie.state.setAnimationByName(0, 'jump', false);
         pixie.state.addAnimationByName(0, 'running', true, 0);
+        jumping = true;
+        setTimeout(function() {
+            jumping = false;
+        }, 600);
     }
 
     animate();
 }
 
 function animate() {
-    postition += 10;
+    delta = 10;
+    position += delta;
 
-    background.position.x = -(postition * 0.6);
+    background.position.x = -(position * 0.6);
     background.position.x %= 1286 * 2;
     if (background.position.x < 0) {
         background.position.x += 1286 * 2;
     }
     background.position.x -= 1286;
 
-    background2.position.x = -(postition * 0.6) + 1286;
+    background2.position.x = -(position * 0.6) + 1286;
     background2.position.x %= 1286 * 2;
     if (background2.position.x < 0) {
         background2.position.x += 1286 * 2;
     }
     background2.position.x -= 1286;
 
-    foreground.position.x = -postition;
+    foreground.position.x = -position;
     foreground.position.x %= 1286 * 2;
     if (foreground.position.x < 0) {
         foreground.position.x += 1286 * 2;
     }
     foreground.position.x -= 1286;
 
-    foreground2.position.x = -postition + 1286;
+    foreground2.position.x = -position + 1286;
     foreground2.position.x %= 1286 * 2;
     if (foreground2.position.x < 0) {
         foreground2.position.x += 1286 * 2;
     }
     foreground2.position.x -= 1286;
 
-    requestAnimationFrame(animate);
+    animateBlock(delta);
+
+    if(collision(pixie, block)) {
+        endScreen.visible = true;
+    } else {
+        requestAnimationFrame(animate);
+    }
 
     renderer.render(stage);
+}
+
+function animateBlock(delta) {
+    block.position.x -= delta;
+    if(block.position.x + block.width  <= 0) {
+        block.position.x = stage.width;
+    }
+}
+
+/**
+ * If objA is inside objB
+ *
+ * @param objA - Must be pixie-dude that has animation on it
+ * @param objB
+ * @returns {boolean}
+ */
+function collision(objA, objB) {
+    if(jumping) {
+        return false;
+    }
+    if(objA.position.x >= objB.position.x &&
+        objA.position.x <= objB.position.x + objB.width) {
+        console.log(objA.position)
+        console.log(objA)
+        return true;
+    }
+    return false;
 }
