@@ -3,101 +3,10 @@
 <html>
 <head>
     <title>Cygnos music player</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-    <script type='text/javascript'>
-        $(document)
-            .ready(function () {
-                $("#search")
-                    .click(function () {
-                        $.getJSON("api/search/" + $("#query").val(),
-                            function (tracks) {
-                                var items = [];
-                                $.each(tracks,
-                                    function (index, track) {
-                                        items.push("<li data-trackData='" +
-                                           JSON.stringify(track) +
-                                            "'>" +
-                                            track.trackName + ' [' + track.artistName + ']' +
-                                            "</li>");
-                                    });
-
-                                $("#results").html(items.join(""));
-                            });
-                    });
-                $("#stop").click(function () {
-                    $.ajax({
-                        type: "POST",
-                        url: "api/player/stop"
-                    });
-                })
-                $("#pause").click(function () {
-                    $.ajax({
-                        type: "POST",
-                        url: "api/player/pause"
-                    });
-                })
-                $("#results")
-                    .on("click",
-                        "li",
-                        function () {
-                            $.ajax({
-                                type: "POST",
-                                url: "api/player/play",
-                                contentType: "application/json",
-                                data: $(this).attr("data-trackData")
-                            });
-                        });
-            });
-    </script>
-    <script src="http://js.leapmotion.com/leap-0.6.3.min.js"></script>
-    <script>
-        var controllerOptions = { enableGestures: true };
-        var lastCall = 0;
-        Leap.loop(controllerOptions,
-            function (frame) {
-                //Only accept one call every three seconds, to avoid flooding our poor little server
-                if (new Date() - lastCall < 3000)
-                    return;
-               
-
-                if (frame.hands.length > 0) {
-                    //thumb down (vertical hand) to stop
-                    for (var i = 0; i < frame.hands.length; i++) {
-                        var hand = frame.hands[i];
-                        if (Math.abs(hand.palmNormal[0]) > 0.7) {
-                            $.ajax({
-                                type: "POST",
-                                url: "api/player/stop",
-                                contentType: "application/json",
-                            });
-                            $("#gesture").html("<i>thumb down</i>")
-                            lastCall = new Date();
-                        }
-                    }
-
-                    //Devil horns plays rock!
-                    for (var i = 0; i < frame.hands.length; i++) {
-                        var hand = frame.hands[i];
-                        if (hand.pinky.extended && !hand.ringFinger.extended && !hand.middleFinger.extended && hand.indexFinger.extended) {
-                            $.ajax({
-                                type: "POST",
-                                url: "api/player/stop",
-                                url: "api/player/play",
-                                contentType: "application/json",
-                                data: JSON.stringify({ "previewUrl": "https://p.scdn.co/mp3-preview/1ee9f1b0c3e3b327dd49ebc6dd64266b01adb96a" })
-                            });
-                            $("#gesture").html("<i>Devil horns</i>")
-                            lastCall = new Date();
-                        }
-                    }
-                }
-            });
-    </script>
-
 </head>
 
 <body>
-    <div class="container">
+    <div id="gameArea" class="container">
         <h1>Search for tracks</h1>
         <p>Type a search query and click on "Search". Then, click on any track to play it on server....</p>
         <input type="text" id="query" value="" class="form-control" placeholder="Search for..." />
@@ -107,6 +16,12 @@
         <div id="results"></div>
         <p id="gesture"></p>
     </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.0.0/pixi.min.js"></script>
+    <script src="libs/pixi-spine.min.js"></script>
+    <script src="pixie.js"></script>
+
 </body>
 
 </html>
