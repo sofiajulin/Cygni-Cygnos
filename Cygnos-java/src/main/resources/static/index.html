@@ -10,8 +10,7 @@
     <input type="text" id="query" value="" class="form-control" placeholder="Player name"/>
     <button id="play" onclick="">Play game!</button>
     <button id="stop" onclick="">Stop game</button>
-    <p id="gesture"></p>
-    <div id="gameArea" style="display:none;"></div>
+    <div id="gameArea"></div>
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
@@ -23,15 +22,12 @@
     $(document).ready(function () {
         $("#play").click(function () {
             $.getJSON("api/search/" + $("#query").val());
-            $("#gameArea").show();
+//            $("#gameArea").show();
+            global.startGame();
         });
 
         $("#stop").click(function () {
-            $.ajax({
-                type: "POST",
-                url: "api/player/stop",
-                contentType: "application/json"
-            });
+            global.stopGame();
             $("#gameArea").hide();
         });
     });
@@ -50,9 +46,7 @@
                     for (var i = 0; i < frame.hands.length; i++) {
                         var hand = frame.hands[i];
                         if (Math.abs(hand.palmNormal[0]) > 0 && hand.palmNormal[0] < 1) {
-                            $("#gesture").html("<i>Hopp!</i>");
-                            global.state.setAnimationByName(0, 'jump', false);
-                            global.state.addAnimationByName(0, 'running', true, 0);
+                            global.onTouchStart();
                             lastCall = new Date();
                         }
                     }
