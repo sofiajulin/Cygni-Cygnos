@@ -5,15 +5,13 @@
 </head>
 
 <body>
-<div id="gameArea" class="container">
-    <h1>Search for tracks</h1>
-    <p>Type a search query and click on "Search". Then, click on any track to play it on server....</p>
-    <input type="text" id="query" value="" class="form-control" placeholder="Search for..."/>
-    <button id="search" onclick="">Search</button>
-    <button id="stop" onclick="">Stop</button>
-    <button id="pause" onclick="">Pause</button>
-    <div id="results"></div>
+<div class="container">
+    <h1>JUMP</h1>
+    <input type="text" id="query" value="" class="form-control" placeholder="Player name"/>
+    <button id="play" onclick="">Play game!</button>
+    <button id="stop" onclick="">Stop game</button>
     <p id="gesture"></p>
+    <div id="gameArea" style="display:none;"></div>
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
@@ -23,8 +21,18 @@
 <script src="pixie.js"></script>
 <script>
     $(document).ready(function () {
-        $("#search").click(function () {
+        $("#play").click(function () {
             $.getJSON("api/search/" + $("#query").val());
+            $("#gameArea").show();
+        });
+
+        $("#stop").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "api/player/stop",
+                contentType: "application/json"
+            });
+            $("#gameArea").hide();
         });
     });
 
