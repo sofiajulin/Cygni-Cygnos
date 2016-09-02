@@ -22,6 +22,8 @@ var position = 0,
     endScreen,
     jumping = false;
 
+var frameCount = 0;
+
 stage.interactive = true;
 
 function onAssetsLoaded(loader, res) {
@@ -60,7 +62,7 @@ function onAssetsLoaded(loader, res) {
 
     endScreen = new PIXI.Text('You DIED',{fontFamily : 'Arial', fontSize: 24, fill : 0xff1010, align : 'center'});
     endScreen.visible = false;
-    stage.addChild(endScreen);
+    // stage.addChild(endScreen);
 
     pixie.stateData.setMixByName('running', 'jump', 0.2);
     pixie.stateData.setMixByName('jump', 'running', 0.4);
@@ -83,7 +85,8 @@ function onAssetsLoaded(loader, res) {
 }
 
 function animate() {
-    delta = 10;
+    frameCount++;
+    delta = 10 + frameCount * 0.002;
     position += delta;
 
     background.position.x = -(position * 0.6);
@@ -117,7 +120,7 @@ function animate() {
     animateBlock(delta);
 
     if(collision(pixie, block)) {
-        endScreen.visible = true;
+        gameEnded()
     } else {
         requestAnimationFrame(animate);
     }
@@ -125,10 +128,15 @@ function animate() {
     renderer.render(stage);
 }
 
+function gameEnded() {
+    endScreen.visible = true;
+    $('#blood').show();
+}
+
 function animateBlock(delta) {
     block.position.x -= delta;
     if(block.position.x + block.width  <= 0) {
-        block.position.x = stage.width;
+        block.position.x = stage.width ;
     }
 }
 
@@ -145,8 +153,6 @@ function collision(objA, objB) {
     }
     if(objA.position.x >= objB.position.x &&
         objA.position.x <= objB.position.x + objB.width) {
-        console.log(objA.position)
-        console.log(objA)
         return true;
     }
     return false;

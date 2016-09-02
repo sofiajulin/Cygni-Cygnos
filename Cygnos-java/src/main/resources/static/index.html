@@ -2,6 +2,17 @@
 <html>
 <head>
     <title>Cygnos music player</title>
+    <style>
+        #gameArea {
+            position: relative;
+            width: 800px;
+        }
+        #blood {
+            position: absolute;
+            display: none;
+            width: 100%;
+        }
+    </style>
 </head>
 
 <body>
@@ -11,12 +22,14 @@
     <button id="play" onclick="">Play game!</button>
     <button id="stop" onclick="">Stop game</button>
     <p id="gesture"></p>
-    <div id="gameArea" style="display:none;"></div>
+    <div id="gameArea">
+        <img id="blood" src="images/blood.gif">
+    </div>
 </div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-<script src="http://js.leapmotion.com/leap-0.6.3.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.0.0/pixi.min.js"></script>
+<script src="libs/jquery.min.js"></script>
+<script src="libs/leap.min.js"></script>
+<script src="libs/pixi.min.js"></script>
 <script src="libs/pixi-spine.min.js"></script>
 <script src="pixie.js"></script>
 <script>
