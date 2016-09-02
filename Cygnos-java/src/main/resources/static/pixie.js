@@ -1,16 +1,15 @@
 var renderer = PIXI.autoDetectRenderer(800, 600);
 
-var global;
-
 document.getElementById("gameArea").appendChild(renderer.view);
 
 // create the root of the scene graph
 var stage = new PIXI.Container();
 
+var global = {};
+
+
 // load spine data
-PIXI.loader
-    .add('pixie', 'images/Pixie.json')
-    .load(onAssetsLoaded);
+
 
 var position = 0,
     background,
@@ -25,6 +24,23 @@ var position = 0,
 var frameCount = 0;
 
 stage.interactive = true;
+
+global.startGame = function () {
+    PIXI.loader
+        .add('pixie', 'images/Pixie.json')
+        .load(onAssetsLoaded);
+};
+
+global.stopGame = function () {
+    endScreen.visible = true;
+
+    $.ajax({
+        type: "POST",
+        url: "api/player/stop",
+        contentType: "application/json"
+    });
+}
+
 
 function onAssetsLoaded(loader, res) {
     background = PIXI.Sprite.fromImage('images/iP4_BGtile.jpg');
@@ -50,7 +66,7 @@ function onAssetsLoaded(loader, res) {
     stage.addChild(block);
 
     pixie = new PIXI.spine.Spine(res.pixie.spineData);
-    global = pixie;
+    // global = pixie;
     var scale = 0.3;
 
     pixie.position.x = 1024 / 5;
@@ -60,7 +76,7 @@ function onAssetsLoaded(loader, res) {
 
     stage.addChild(pixie);
 
-    endScreen = new PIXI.Text('You DIED',{fontFamily : 'Arial', fontSize: 24, fill : 0xff1010, align : 'center'});
+    endScreen = new PIXI.Text('You DIED', {fontFamily: 'Arial', fontSize: 24, fill: 0xff1010, align: 'center'});
     endScreen.visible = false;
     // stage.addChild(endScreen);
 
@@ -69,17 +85,18 @@ function onAssetsLoaded(loader, res) {
 
     pixie.state.setAnimationByName(0, 'running', true);
 
-    stage.on('mousedown', onTouchStart);
-    stage.on('touchstart', onTouchStart);
 
-    function onTouchStart() {
+    global.onTouchStart = function () {
         pixie.state.setAnimationByName(0, 'jump', false);
         pixie.state.addAnimationByName(0, 'running', true, 0);
         jumping = true;
-        setTimeout(function() {
+        setTimeout(function () {
             jumping = false;
         }, 600);
     }
+
+    stage.on('mousedown', global.onTouchStart);
+    stage.on('touchstart', global.onTouchStart);
 
     animate();
 }
@@ -121,6 +138,7 @@ function animate() {
 
     if(collision(pixie, block)) {
         gameEnded()
+        global.stopGame();
     } else {
         requestAnimationFrame(animate);
     }
@@ -135,8 +153,8 @@ function gameEnded() {
 
 function animateBlock(delta) {
     block.position.x -= delta;
-    if(block.position.x + block.width  <= 0) {
-        block.position.x = stage.width ;
+    if (block.position.x + block.width <= 0) {
+        block.position.x = stage.width;
     }
 }
 
@@ -148,12 +166,14 @@ function animateBlock(delta) {
  * @returns {boolean}
  */
 function collision(objA, objB) {
-    if(jumping) {
+    if (jumping) {
         return false;
     }
-    if(objA.position.x >= objB.position.x &&
+    if (objA.position.x >= objB.position.x &&
         objA.position.x <= objB.position.x + objB.width) {
         return true;
     }
     return false;
 }
+
+
