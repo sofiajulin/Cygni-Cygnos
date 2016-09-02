@@ -30,7 +30,7 @@ function onAssetsLoaded(loader, res) {
     foreground2 = PIXI.Sprite.fromImage('images/iP4_ground.png');
     stage.addChild(foreground);
     stage.addChild(foreground2);
-    foreground.position.y = foreground2.position.y = 640 - foreground2.height;
+    foreground.position.y = foreground2.position.y = 600 - 130;
 
     var pixie = new PIXI.spine.Spine(res.pixie.spineData);
     global = pixie;
