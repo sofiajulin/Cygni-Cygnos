@@ -42,7 +42,9 @@
 //                                    url: "api/player/stop",
 //                                    contentType: "application/json",
 //                                });
-                                $("#gesture").html("<i>thumb down</i>")
+                                $("#gesture").html("<i>thumb down</i>");
+                                global.state.setAnimationByName(0, 'jump', false);
+                                global.state.addAnimationByName(0, 'running', true, 0);
                                 lastCall = new Date();
                             }
                         }

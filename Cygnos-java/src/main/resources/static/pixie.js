@@ -1,5 +1,7 @@
 var renderer = PIXI.autoDetectRenderer(800, 600);
 
+var global;
+
 document.getElementById("gameArea").appendChild(renderer.view);
 
 // create the root of the scene graph
@@ -31,7 +33,7 @@ function onAssetsLoaded(loader, res) {
     foreground.position.y = foreground2.position.y = 640 - foreground2.height;
 
     var pixie = new PIXI.spine.Spine(res.pixie.spineData);
-
+    global = pixie;
     var scale = 0.3;
 
     pixie.position.x = 1024 / 3;
@@ -48,6 +50,7 @@ function onAssetsLoaded(loader, res) {
 
     stage.on('mousedown', onTouchStart);
     stage.on('touchstart', onTouchStart);
+    stage.on('jump', onTouchStart);
 
     function onTouchStart() {
         pixie.state.setAnimationByName(0, 'jump', false);
