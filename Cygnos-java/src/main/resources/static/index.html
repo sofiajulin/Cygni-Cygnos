@@ -28,7 +28,7 @@
         Leap.loop(controllerOptions,
                 function (frame) {
                     //Only accept one call every three seconds, to avoid flooding our poor little server
-                    if (new Date() - lastCall < 3000)
+                    if (new Date() - lastCall < 500)
                         return;
 
 
@@ -36,34 +36,13 @@
                         //thumb down (vertical hand) to stop
                         for (var i = 0; i < frame.hands.length; i++) {
                             var hand = frame.hands[i];
-                            if (Math.abs(hand.palmNormal[0]) > 0.7) {
-//                                $.ajax({
-//                                    type: "POST",
-//                                    url: "api/player/stop",
-//                                    contentType: "application/json",
-//                                });
-                                $("#gesture").html("<i>thumb down</i>");
+                            if (Math.abs(hand.palmNormal[0]) > 0 && hand.palmNormal[0] < 1) {
+                                $("#gesture").html("<i>Hopp!</i>");
                                 global.state.setAnimationByName(0, 'jump', false);
                                 global.state.addAnimationByName(0, 'running', true, 0);
                                 lastCall = new Date();
                             }
                         }
-
-//                        //Devil horns plays rock!
-//                        for (var i = 0; i < frame.hands.length; i++) {
-//                            var hand = frame.hands[i];
-//                            if (hand.pinky.extended && !hand.ringFinger.extended && !hand.middleFinger.extended && hand.indexFinger.extended) {
-//                                $.ajax({
-//                                    type: "POST",
-//                                    url: "api/player/stop",
-//                                    url: "api/player/play",
-//                                    contentType: "application/json",
-//                                    data: JSON.stringify({ "previewUrl": "https://p.scdn.co/mp3-preview/1ee9f1b0c3e3b327dd49ebc6dd64266b01adb96a" })
-//                                });
-//                                $("#gesture").html("<i>Devil horns</i>")
-//                                lastCall = new Date();
-//                            }
-//                        }
                     }
                 });
     </script>
