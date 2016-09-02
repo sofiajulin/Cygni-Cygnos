@@ -8,6 +8,7 @@ import se.cygni.cygnos.model.Track;
 import se.cygni.cygnos.service.Mp3PlayerService;
 
 import java.net.URL;
+import java.util.function.Consumer;
 
 @RestController
 @RequestMapping("/api/player")
@@ -56,8 +57,12 @@ public class PlayerController {
         // Verify correct url
         new URL(track.getPreviewUrl());
 
-        player.play(track);
+
+        player.play(track, playerState -> {
+            System.out.println(playerState + " " + track.getTrackName());
+        });
     }
+
 
     @RequestMapping(path = "/stop",
             method = RequestMethod.POST)

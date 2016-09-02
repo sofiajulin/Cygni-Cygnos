@@ -8,6 +8,8 @@ import se.cygni.cygnos.model.Track;
 
 import java.io.File;
 import java.net.URL;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 @Service
 public class Mp3PlayerService {
@@ -22,8 +24,14 @@ public class Mp3PlayerService {
         if (mediaPlayer != null) {
             mediaPlayer.pause();
             switch (state) {
-                case Paused: mediaPlayer.play(); this.state = PlayerState.Playing; break;
-                case Playing: mediaPlayer.pause(); this.state = PlayerState.Paused; break;
+                case Paused:
+                    mediaPlayer.play();
+                    this.state = PlayerState.Playing;
+                    break;
+                case Playing:
+                    mediaPlayer.pause();
+                    this.state = PlayerState.Paused;
+                    break;
             }
 
         } else {
@@ -31,7 +39,7 @@ public class Mp3PlayerService {
         }
     }
 
-    public void play(Track track) throws Exception {
+    public void play(Track track, Consumer<PlayerState> callback) throws Exception {
 
         // MediaPlayer can't fetch resources over https
         // Store the file temporarily on disk...
@@ -51,6 +59,7 @@ public class Mp3PlayerService {
             @Override
             public void run() {
                 state = PlayerState.Stopped;
+                callback.accept(state);
             }
         });
         mediaPlayer.play();

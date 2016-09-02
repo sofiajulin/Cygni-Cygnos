@@ -36,7 +36,7 @@ function onAssetsLoaded(loader, res) {
     global = pixie;
     var scale = 0.3;
 
-    pixie.position.x = 1024 / 3;
+    pixie.position.x = 1024 / 5;
     pixie.position.y = 500;
 
     pixie.scale.x = pixie.scale.y = scale;

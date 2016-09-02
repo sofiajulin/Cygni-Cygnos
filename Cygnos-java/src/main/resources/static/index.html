@@ -1,51 +1,56 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <title>Cygnos music player</title>
 </head>
 
 <body>
-    <div id="gameArea" class="container">
-        <h1>Search for tracks</h1>
-        <p>Type a search query and click on "Search". Then, click on any track to play it on server....</p>
-        <input type="text" id="query" value="" class="form-control" placeholder="Search for..." />
-        <button id="search" onclick="">Search</button>
-        <button id="stop" onclick="">Stop</button>
-        <button id="pause" onclick="">Pause</button>
-        <div id="results"></div>
-        <p id="gesture"></p>
-    </div>
+<div id="gameArea" class="container">
+    <h1>Search for tracks</h1>
+    <p>Type a search query and click on "Search". Then, click on any track to play it on server....</p>
+    <input type="text" id="query" value="" class="form-control" placeholder="Search for..."/>
+    <button id="search" onclick="">Search</button>
+    <button id="stop" onclick="">Stop</button>
+    <button id="pause" onclick="">Pause</button>
+    <div id="results"></div>
+    <p id="gesture"></p>
+</div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-    <script src="http://js.leapmotion.com/leap-0.6.3.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.0.0/pixi.min.js"></script>
-    <script src="libs/pixi-spine.min.js"></script>
-    <script src="pixie.js"></script>
-    <script>
-        var controllerOptions = { enableGestures: true };
-        var lastCall = 0;
-        Leap.loop(controllerOptions,
-                function (frame) {
-                    //Only accept one call every three seconds, to avoid flooding our poor little server
-                    if (new Date() - lastCall < 500)
-                        return;
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script src="http://js.leapmotion.com/leap-0.6.3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.0.0/pixi.min.js"></script>
+<script src="libs/pixi-spine.min.js"></script>
+<script src="pixie.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#search").click(function () {
+            $.getJSON("api/search/" + $("#query").val());
+        });
+    });
+
+    var controllerOptions = {enableGestures: true};
+    var lastCall = 0;
+    Leap.loop(controllerOptions,
+            function (frame) {
+                //Only accept one call every three seconds, to avoid flooding our poor little server
+                if (new Date() - lastCall < 500)
+                    return;
 
 
-                    if (frame.hands.length > 0) {
-                        //thumb down (vertical hand) to stop
-                        for (var i = 0; i < frame.hands.length; i++) {
-                            var hand = frame.hands[i];
-                            if (Math.abs(hand.palmNormal[0]) > 0 && hand.palmNormal[0] < 1) {
-                                $("#gesture").html("<i>Hopp!</i>");
-                                global.state.setAnimationByName(0, 'jump', false);
-                                global.state.addAnimationByName(0, 'running', true, 0);
-                                lastCall = new Date();
-                            }
+                if (frame.hands.length > 0) {
+                    //thumb down (vertical hand) to stop
+                    for (var i = 0; i < frame.hands.length; i++) {
+                        var hand = frame.hands[i];
+                        if (Math.abs(hand.palmNormal[0]) > 0 && hand.palmNormal[0] < 1) {
+                            $("#gesture").html("<i>Hopp!</i>");
+                            global.state.setAnimationByName(0, 'jump', false);
+                            global.state.addAnimationByName(0, 'running', true, 0);
+                            lastCall = new Date();
                         }
                     }
-                });
-    </script>
+                }
+            });
+</script>
 
 </body>
 
